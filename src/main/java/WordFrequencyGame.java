@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.io.CharArrayWriter;
 
 import java.time.LocalDateTime;
@@ -14,17 +10,11 @@ public class WordFrequencyGame {
         Map<String, Integer> wordMap = getWordMapBySentence(sentence);
 
         return formatString(wordMap);
-
     }
 
     private String formatString(Map<String, Integer> wordMap) {
-        List<Input> list = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : wordMap.entrySet()) {
-            Input input = new Input(entry.getKey(), entry.getValue());
-            list.add(input);
-        }
-
-        list.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+        List<Input> list = wordMap.entrySet().stream().sorted((entry1, entry2)-> entry2.getValue() - entry1.getValue())
+                .map(word -> new Input(word.getKey(), word.getValue())).collect(Collectors.toList());
 
         return list.stream().map(word -> word.getValue() + " " + word.getWordCount()).collect(Collectors.joining("\n"));
     }
